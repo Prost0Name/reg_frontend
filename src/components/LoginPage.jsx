@@ -21,7 +21,7 @@ function LoginPage() {
     e.preventDefault();
     try {
       const endpoint = action === 'login' ? '/auth' : '/register';
-      const response = await fetch(`http://87.242.100.33:1323${endpoint}`, {
+      const response = await fetch(`https://api.vsrs-rs.ru${endpoint}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

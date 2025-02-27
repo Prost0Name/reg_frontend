@@ -20,7 +20,7 @@ function LoginPage() {
   const handleSubmit = async (e, action) => {
     e.preventDefault();
     try {
-      const endpoint = action === 'login' ? '/auth' : '/register';
+      const endpoint = action === 'login' ? '/auth' : '/reg';
       const response = await fetch(`https://api.vsrs-rs.ru${endpoint}`, {
         method: 'POST',
         headers: {

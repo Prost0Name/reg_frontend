@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -34,8 +35,8 @@ function LoginPage() {
         console.log(action === 'login' ? 'Успешный вход:' : 'Успешная регистрация:', data);
 
         if (action === 'login') {
-          // Store the token in local storage
-          localStorage.setItem('authToken', data.token);
+          Cookies.set('authToken', data.token, { expires: 7 });
+          console.log('Полученный токен:', data.token);
         }
 
         navigate('/home');

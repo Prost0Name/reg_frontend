@@ -7,7 +7,7 @@ function LoginPage() {
     login: '',
     password: ''
   });
-
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -36,12 +36,13 @@ function LoginPage() {
 
         if (action === 'login') {
           Cookies.set('authToken', data.token, { expires: 7 });
-          console.log('Полученный токен:', data.token);
         }
 
         navigate('/home');
       } else {
-        console.error(action === 'login' ? 'Ошибка входа' : 'Ошибка регистрации');
+        const errorData = await response.json();
+        setErrorMessage(errorData.error);
+        console.error(action === 'login' ? 'Ошибка входа' : 'Ошибка регистрации', errorData.error);
       }
     } catch (error) {
       console.error('Ошибка:', error);
@@ -51,6 +52,7 @@ function LoginPage() {
   return (
     <div className="login-page">
       <h2>Login</h2>
+      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       <form onSubmit={(e) => handleSubmit(e, 'login')}>
         <div>
           <label htmlFor="login">Username:</label>

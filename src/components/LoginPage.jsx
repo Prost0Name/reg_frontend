@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { TextField, Button, Container, Typography, Box, Alert } from '@mui/material';
 
 function LoginPage() {
   const [formData, setFormData] = useState({
@@ -50,38 +51,55 @@ function LoginPage() {
   };
 
   return (
-    <div className="login-page">
-      <h2>Login</h2>
-      {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
-      <form onSubmit={(e) => handleSubmit(e, 'login')}>
-        <div>
-          <label htmlFor="login">Username:</label>
-          <input 
-            type="text" 
-            id="login" 
-            name="login" 
+    <Container maxWidth="xs">
+      <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography component="h1" variant="h5">
+          Login
+        </Typography>
+        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+        <Box component="form" onSubmit={(e) => handleSubmit(e, 'login')} sx={{ mt: 1 }}>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="login"
+            label="Username"
+            name="login"
+            autoComplete="login"
+            autoFocus
             value={formData.login}
             onChange={handleChange}
-            required 
           />
-        </div>
-        <div>
-          <label htmlFor="password">Password:</label>
-          <input 
-            type="password" 
-            id="password" 
-            name="password" 
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="current-password"
             value={formData.password}
             onChange={handleChange}
-            required 
           />
-        </div>
-        <div>
-          <button type="submit">Войти</button>
-          <button type="button" onClick={(e) => handleSubmit(e, 'register')}>Регистрация</button>
-        </div>
-      </form>
-    </div>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}
+          >
+            Войти
+          </Button>
+          <Button
+            fullWidth
+            variant="outlined"
+            onClick={(e) => handleSubmit(e, 'register')}
+          >
+            Регистрация
+          </Button>
+        </Box>
+      </Box>
+    </Container>
   );
 }
 

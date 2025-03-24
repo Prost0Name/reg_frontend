@@ -37,9 +37,8 @@ function LoginPage() {
 
         if (action === 'login') {
           Cookies.set('authToken', data.token, { expires: 7 });
+          navigate('/home');
         }
-
-        navigate('/home');
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.error);

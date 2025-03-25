@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { AppBar, Toolbar, Button, TextField, Container, Box, Typography, Alert, Tabs, Tab } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { TextField, Button, Container, Typography, Box, Alert } from '@mui/material';
 
-function LoginPage() {
+function AuthPage() {
   const [formData, setFormData] = useState({
     login: '',
     password: ''
@@ -19,11 +19,10 @@ function LoginPage() {
     }));
   };
 
-  const handleSubmit = async (e, action) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const endpoint = action === 'login' ? '/auth' : '/reg';
-      const response = await fetch(`https://api.vsrs-rs.ru${endpoint}`, {
+      const response = await fetch('https://api.vsrs-rs.ru/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,73 +32,92 @@ function LoginPage() {
       
       if (response.ok) {
         const data = await response.json();
-        console.log(action === 'login' ? 'Успешный вход:' : 'Успешная регистрация:', data);
-
-        if (action === 'login') {
-          Cookies.set('authToken', data.token, { expires: 7 });
-          navigate('/home');
-        }
+        Cookies.set('authToken', data.token, { expires: 7 });
+        navigate('/home');
       } else {
         const errorData = await response.json();
         setErrorMessage(errorData.error);
-        console.error(action === 'login' ? 'Ошибка входа' : 'Ошибка регистрации', errorData.error);
       }
     } catch (error) {
       console.error('Ошибка:', error);
     }
   };
 
+  const handleTabChange = (event, newValue) => {
+    if (newValue === 0) {
+      navigate('/'); // Главная
+    } else if (newValue === 1) {
+      navigate('/competitions'); // Соревнования
+    } else {
+      navigate('/tasks'); // Задачи
+    }
+  };
+
   return (
-    <Container maxWidth="xs">
-      <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-        <Typography component="h1" variant="h5">
-          Login
-        </Typography>
-        {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-        <Box component="form" onSubmit={(e) => handleSubmit(e, 'login')} sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="login"
-            label="Username"
-            name="login"
-            autoComplete="login"
-            autoFocus
-            value={formData.login}
-            onChange={handleChange}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
+    <div style={{ padding: '20px' }}>
+      <AppBar position="static" style={{ backgroundColor: '#B0BEC5', borderRadius: '8px' }} elevation={0}>
+        <Toolbar>
+          <Tabs onChange={handleTabChange} textColor="inherit">
+            <Tab label="Главная" style={{ color: '#FFFFFF', fontWeight: 'bold' }} />
+            <Tab label="Соревнования" style={{ color: '#FFFFFF', fontWeight: 'bold' }} />
+            <Tab label="Задачи" style={{ color: '#FFFFFF', fontWeight: 'bold' }} />
+          </Tabs>
+          <Button color="inherit" onClick={() => navigate('/enter')} style={{ marginLeft: 'auto', color: '#FFFFFF', fontWeight: 'bold' }}>
             Войти
           </Button>
-          <Button
-            fullWidth
-            variant="outlined"
-            onClick={(e) => handleSubmit(e, 'register')}
-          >
-            Регистрация
-          </Button>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="xs">
+        <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          <Typography component="h1" variant="h5">
+            Вход
+          </Typography>
+          {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="login"
+              label="Логин"
+              name="login"
+              autoComplete="login"
+              autoFocus
+              value={formData.login}
+              onChange={handleChange}
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="Пароль"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Войти
+            </Button>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={(e) => handleSubmit(e, 'register')}
+            >
+              Регистрация
+            </Button>
+          </Box>
         </Box>
-      </Box>
-    </Container>
+      </Container>
+    </div>
   );
 }
 
-export default LoginPage; 
+export default AuthPage; 

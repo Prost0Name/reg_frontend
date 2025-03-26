@@ -36,7 +36,7 @@ function AuthPage() {
     }
 
     try {
-      const response = await fetch('https://api.vsrs-rs.ru/register', {
+      const response = await fetch('https://api.vsrs-rs.ru/reg', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

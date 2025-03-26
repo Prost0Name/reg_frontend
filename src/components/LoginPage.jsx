@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Button, TextField, Container, Box, Typography, Alert, Tabs, Tab, Drawer } from '@mui/material';
+import { AppBar, Toolbar, Button, TextField, Container, Box, Typography, Alert, Drawer } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
@@ -42,16 +42,6 @@ function AuthPage() {
       }
     } catch (error) {
       console.error('Ошибка:', error);
-    }
-  };
-
-  const handleTabChange = (event, newValue) => {
-    if (newValue === 0) {
-      navigate('/'); // Главная
-    } else if (newValue === 1) {
-      navigate('/competitions'); // Соревнования
-    } else {
-      navigate('/tasks'); // Задачи
     }
   };
 
@@ -139,7 +129,7 @@ function AuthPage() {
             <Button
               fullWidth
               variant="outlined"
-              onClick={(e) => handleSubmit(e, 'register')}
+              onClick={() => navigate('/register')}
             >
               Регистрация
             </Button>

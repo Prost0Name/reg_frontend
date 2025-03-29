@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { jwtDecode } from 'jwt-decode';
+import Navigation from './Navigation';
 
 function HomePage() {
   const navigate = useNavigate();
@@ -19,19 +20,24 @@ function HomePage() {
       if (decoded.exp < currentTime) {
         // Token expired
         Cookies.remove('authToken');
+        Cookies.remove('userLogin');
         navigate('/');
       }
     } catch (error) {
       // Invalid token
       Cookies.remove('authToken');
+      Cookies.remove('userLogin');
       navigate('/');
     }
   }, [navigate]);
 
   return (
-    <div className="home-page">
-      <h1>Добро пожаловать!</h1>
-      <p>Вы успешно вошли в систему.</p>
+    <div style={{ padding: '20px' }}>
+      <Navigation />
+      <div className="home-page" style={{ textAlign: 'center', marginTop: '20px' }}>
+        <h1>Добро пожаловать!</h1>
+        <p>Вы успешно вошли в систему.</p>
+      </div>
     </div>
   );
 }
